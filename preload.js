@@ -39,6 +39,13 @@ contextBridge.exposeInMainWorld('zyAPI', {
     saveScreenshot: (buffer) => ipcRenderer.invoke('save-screenshot', { buffer }),
 
     /**
+     * Window controls for frameless window
+     */
+    windowMinimize: () => ipcRenderer.send('window-minimize'),
+    windowMaximize: () => ipcRenderer.send('window-maximize'),
+    windowClose: () => ipcRenderer.send('window-close'),
+
+    /**
      * Platform information for UI customization
      */
     platform: process.platform

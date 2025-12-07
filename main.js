@@ -45,15 +45,15 @@ function createWindow() {
         minWidth: MIN_WIDTH,
         minHeight: MIN_HEIGHT,
 
-        // Use custom title bar for minimal UI
-        frame: true,
-        titleBarStyle: 'default',
+        // Frameless window for custom title bar
+        frame: false,
+        titleBarStyle: 'hidden',
 
         // Application Icon
         icon: path.join(__dirname, 'assets', 'zy.png'),
 
         // Window appearance
-        backgroundColor: '#1a1a2e',
+        backgroundColor: '#1c1c1c',
         show: false, // Don't show until ready (prevents white flash)
 
         // Web preferences for security and performance
@@ -110,6 +110,23 @@ function setupIpcHandlers() {
 
     ipcMain.handle('get-app-version', () => {
         return app.getVersion();
+    });
+
+    // --- Window Control IPC ---
+    ipcMain.on('window-minimize', () => {
+        mainWindow.minimize();
+    });
+
+    ipcMain.on('window-maximize', () => {
+        if (mainWindow.isMaximized()) {
+            mainWindow.unmaximize();
+        } else {
+            mainWindow.maximize();
+        }
+    });
+
+    ipcMain.on('window-close', () => {
+        mainWindow.close();
     });
 
     // --- Developer Tools IPC ---

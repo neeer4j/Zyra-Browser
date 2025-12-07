@@ -339,6 +339,38 @@ body {
     color: var(--text-primary);
 }
 
+/* Window Controls (Minimize, Maximize, Close) */
+.window-controls {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-left: auto;
+    -webkit-app-region: no-drag;
+}
+
+.window-btn {
+    width: 46px;
+    height: 34px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition-fast);
+}
+
+.window-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.window-btn.close:hover {
+    background: #e81123;
+    color: white;
+}
+
 /* ============================================
    NAVBAR (Clean, Minimal)
    ============================================ */

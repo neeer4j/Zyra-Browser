@@ -327,6 +327,74 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.devPanel.style.display = elements.devPanel.style.display === 'none' ? 'flex' : 'none';
     });
 
+    // Sidebar Toggle
+    const btnSidebarToggle = document.getElementById('btn-toggle-sidebar');
+    if (btnSidebarToggle) {
+        btnSidebarToggle.addEventListener('click', () => {
+            elements.sidebar.classList.toggle('open');
+        });
+    }
+
+    // Window Controls (Frameless Window)
+    document.getElementById('btn-minimize')?.addEventListener('click', () => {
+        window.zyAPI.windowMinimize();
+    });
+
+    document.getElementById('btn-maximize')?.addEventListener('click', () => {
+        window.zyAPI.windowMaximize();
+    });
+
+    document.getElementById('btn-close')?.addEventListener('click', () => {
+        window.zyAPI.windowClose();
+    });
+
+    // Split View Toggle
+    const btnSplitView = document.getElementById('btn-split-view');
+    if (btnSplitView) {
+        btnSplitView.addEventListener('click', () => {
+            state.isSplitView = !state.isSplitView;
+            btnSplitView.classList.toggle('active', state.isSplitView);
+
+            const container = elements.viewsContainer;
+
+            if (state.isSplitView && state.tabs.length >= 2) {
+                // Enable split view - show 2 tabs side by side
+                container.style.display = 'grid';
+                container.style.gridTemplateColumns = '1fr 1fr';
+
+                // Show first two tabs
+                const firstTab = state.tabs[0];
+                const secondTab = state.tabs[1];
+
+                document.querySelectorAll('webview').forEach(v => v.style.display = 'none');
+
+                const view1 = document.getElementById(`view-${firstTab.id}`);
+                const view2 = document.getElementById(`view-${secondTab.id}`);
+
+                if (view1) view1.style.display = 'flex';
+                if (view2) view2.style.display = 'flex';
+
+                state.splitTabId = secondTab.id;
+            } else {
+                // Disable split view
+                container.style.display = 'block';
+                container.style.gridTemplateColumns = '';
+                state.splitTabId = null;
+
+                // Show only active tab
+                TabManager.switchTab(state.activeTabId);
+            }
+        });
+    }
+
+    // DevTools Toggle
+    elements.btnDevTools?.addEventListener('click', () => {
+        const webview = TabManager.getActiveWebview();
+        if (webview) {
+            webview.isDevToolsOpened() ? webview.closeDevTools() : webview.openDevTools();
+        }
+    });
+
     // Initialize Systems
     SidebarManager.init();
 
