@@ -34,11 +34,6 @@ contextBridge.exposeInMainWorld('zyAPI', {
     getMetrics: () => ipcRenderer.invoke('get-system-metrics'),
 
     /**
-     * Save a screenshot buffer to disk
-     */
-    saveScreenshot: (buffer) => ipcRenderer.invoke('save-screenshot', { buffer }),
-
-    /**
      * Window controls for frameless window
      */
     windowMinimize: () => ipcRenderer.send('window-minimize'),
@@ -46,27 +41,39 @@ contextBridge.exposeInMainWorld('zyAPI', {
     windowClose: () => ipcRenderer.send('window-close'),
 
     /**
+     * Open settings window
+     */
+    openSettings: () => ipcRenderer.send('open-settings'),
+
+    /**
+     * Settings Management
+     * Listen for settings updates from main process
+     */
+    onSettingsUpdated: (callback) => {
+        // Filter callback to prevent exposing IPC event object
+        const subscription = (event, settings) => callback(settings);
+        ipcRenderer.on('settings-updated', subscription);
+
+        // Return a cleanup function
+        return () => ipcRenderer.removeListener('settings-updated', subscription);
+    },
+
+    /**
+     * Data Clearing
+     */
+    clearCache: () => ipcRenderer.send('clear-cache'),
+    clearCookies: () => ipcRenderer.send('clear-cookies'),
+    clearHistory: () => ipcRenderer.send('clear-history'), // Handled in renderer logic mostly, but good to have hooks
+    clearAllData: () => ipcRenderer.send('clear-all-data'),
+
+    /**
+     * Download Management
+     */
+    selectDownloadLocation: () => ipcRenderer.invoke('select-download-location'),
+    getDefaultDownloadPath: () => ipcRenderer.invoke('get-default-download-path'),
+
+    /**
      * Platform information for UI customization
      */
     platform: process.platform
 });
-
-// ============================================
-// NOTES FOR CUSTOMIZATION
-// ============================================
-
-/**
- * To add more IPC functionality:
- * 
- * 1. Add a handler in main.js:
- *    ipcMain.handle('my-action', (event, args) => {
- *        // Handle the action
- *        return result;
- *    });
- * 
- * 2. Expose it here:
- *    myAction: (args) => ipcRenderer.invoke('my-action', args)
- * 
- * 3. Use in renderer.js:
- *    const result = await window.zyAPI.myAction(args);
- */

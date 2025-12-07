@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Zy Browser</title>
+    <style>
+        :root {
+            --bg-primary: #f1f3f4;
+            --bg-card: #ffffff;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --accent-color: #1a73e8;
+            --border-color: #dadce0;
+            --nav-width: 250px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #202124;
+                --bg-card: #292a2d;
+                --text-primary: #e8eaed;
+                --text-secondary: #9aa0a6;
+                --accent-color: #8ab4f8;
+                --border-color: #3c4043;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            font-size: 13px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--nav-width);
+            background-color: var(--bg-primary);
+            padding: 8px 0;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            position: fixed;
+            height: 100%;
+        }
+
+        .nav-item {
+            padding: 0 24px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 0 24px 24px 0;
+            margin-right: 8px;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            color: var(--accent-color);
+            background-color: rgba(26, 115, 232, 0.1);
+        }
+
+        .nav-icon {
+            margin-right: 16px;
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--nav-width);
+            padding: 2px 0 0 0;
+            height: 100%;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .content-container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 24px 0 64px 0;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 32px 0 12px 20px;
+        }
+
+        /* Settings Card */
+        .settings-card {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .setting-row {
+            padding: 0 20px;
+            min-height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info {
+            flex: 1;
+            padding-right: 16px;
+        }
+
+        .setting-label {
+            font-size: 13px;
+            color: var(--text-primary);
+            display: block;
+        }
+
+        .setting-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Controls */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 36px;
+            height: 20px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #9aa0a6;
+            transition: .2s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .2s;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        input:checked+.slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(16px);
+        }
+
+        select {
+            background-color: transparent;
+            color: var(--text-secondary);
+            border: none;
+            font-size: 13px;
+            padding: 8px;
+            cursor: pointer;
+            outline: none;
+            border-radius: 4px;
+        }
+
+        select:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--text-primary);
+        }
+
+        button.btn-text {
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.1s;
+        }
+
+        button.btn-text:hover {
+            background-color: rgba(26, 115, 232, 0.04);
+            border-color: var(--border-color);
+        }
+
+        button.btn-danger {
+            color: #d93025;
+            border-color: rgba(217, 48, 37, 0.2);
+        }
+
+        button.btn-danger:hover {
+            background-color: rgba(217, 48, 37, 0.04);
+        }
+
+        /* Headers */
+        h1 {
+            font-size: 22px;
+            font-weight: 400;
+            padding: 20px 24px;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <!-- Google Settings Icon Style (Simulated) -->
+        <h1 style="border: none; padding-bottom: 0; margin-bottom: 16px; font-size: 20px;">Settings</h1>
+
+        <a href="#appearance" class="nav-item active" onclick="scrollToSection('appearance')">
+            <span class="nav-icon">🎨</span> Appearance
+        </a>
+        <a href="#search" class="nav-item" onclick="scrollToSection('search')">
+            <span class="nav-icon">🔍</span> Search engine
+        </a>
+        <a href="#privacy" class="nav-item" onclick="scrollToSection('privacy')">
+            <span class="nav-icon">🛡️</span> Privacy and security
+        </a>
+        <a href="#downloads" class="nav-item" onclick="scrollToSection('downloads')">
+            <span class="nav-icon">⬇️</span> Downloads
+        </a>
+        <a href="#system" class="nav-item" onclick="scrollToSection('system')">
+            <span class="nav-icon">🔧</span> System
+        </a>
+        <a href="#about" class="nav-item" onclick="scrollToSection('about')">
+            <span class="nav-icon">ℹ️</span> About Zy Browser
+        </a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-container">
+
+            <!-- Appearance Section -->
+            <div id="appearance">
+                <h2 class="section-title">Appearance</h2>
+                <div class="settings-card">
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Mode</span>
+                            <span class="setting-description">Choose light or dark theme</span>
+                        </div>
+                        <select id="theme-select">
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                            <option value="system">Device default</option>
+                        </select>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Show home button</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="show-home-btn" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div id="search">
+                <h2 class="section-title">Search engine</h2>
+                <div class="settings-card">
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Search engine used in the address bar</span>
+                        </div>
+                        <select id="search-engine">
+                            <option value="google">Google</option>
+                            <option value="duckduckgo">DuckDuckGo</option>
+                            <option value="bing">Bing</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy Section -->
+            <div id="privacy">
+                <h2 class="section-title">Privacy and security</h2>
+                <div class="settings-card">
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Clear browsing data</span>
+                            <span class="setting-description">Clear history, cookies, cache, and more</span>
+                        </div>
+                        <button class="btn-text" id="btn-clear-data">Clear data</button>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Third-party cookies</span>
+                            <span class="setting-description">Block third-party cookies</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="block-3rd-cookies" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Send "Do Not Track" request</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="do-not-track" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Site Settings</span>
+                            <span class="setting-description">Controls for Camera, Mic, Notifications (Default:
+                                Deny)</span>
+                        </div>
+                        <button class="btn-text" style="color: grey; cursor: default;">Managed by Policy</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Downloads Section -->
+            <div id="downloads">
+                <h2 class="section-title">Downloads</h2>
+                <div class="settings-card">
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Location</span>
+                            <span class="setting-description" id="download-path">C:\Users\Downloads</span>
+                        </div>
+                        <button class="btn-text" id="btn-change-loc">Change</button>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Ask where to save each file before downloading</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="ask-download" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Section -->
+            <div id="system">
+                <h2 class="section-title">System</h2>
+                <div class="settings-card">
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Use hardware acceleration when available</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="hardware-accel" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Open proxy settings</span>
+                        </div>
+                        <button class="btn-text" id="btn-proxy">Open</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Section -->
+            <div id="about">
+                <h2 class="section-title">About Zy Browser</h2>
+                <div class="settings-card">
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label" style="font-weight: 500; font-size: 15px;">Zy Browser</span>
+                            <span class="setting-description">Version 1.0.0 (Secure Build)</span>
+                        </div>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Update Status</span>
+                            <span class="setting-description">Zy Browser is up to date</span>
+                        </div>
+                        <div style="color: #188038; font-size: 20px;">✓</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="settings.js"></script>
+    <script>
+        // Smooth scroll and active navigation highlighting
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+
+            // Update active state
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelector(`a[href="#${id}"]`).classList.add('active');
+        }
+    </script>
+</body>
+
+</html>

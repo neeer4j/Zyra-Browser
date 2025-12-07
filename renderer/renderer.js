@@ -52,7 +52,7 @@ const TabManager = {
     /**
      * Create a new tab and its webview
      */
-    createTab: (url = 'https://www.google.com', activate = true) => {
+    createTab: (url = 'home.html', activate = true) => {
         const tabId = 'tab-' + Date.now();
         const tabData = { id: tabId, url, title: 'New Tab', isLoading: true };
         state.tabs.push(tabData);
@@ -295,7 +295,7 @@ function updateNavigationButtons() {
 
 // URL Utilities
 function formatUrl(input) {
-    if (!input) return 'https://www.google.com';
+    if (!input) return 'home.html';
     let url = input.trim();
     if (url.includes(' ') || !url.includes('.')) return 'https://www.google.com/search?q=' + encodeURIComponent(url);
     if (!/^https?:\/\//i.test(url)) return 'https://' + url;
@@ -332,6 +332,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnSidebarToggle) {
         btnSidebarToggle.addEventListener('click', () => {
             elements.sidebar.classList.toggle('open');
+        });
+    }
+
+    // Settings button
+    const btnSettings = document.getElementById('btn-settings');
+    if (btnSettings) {
+        btnSettings.addEventListener('click', () => {
+            window.zyAPI.openSettings();
         });
     }
 
@@ -399,5 +407,5 @@ document.addEventListener('DOMContentLoaded', () => {
     SidebarManager.init();
 
     // Create initial tab
-    TabManager.createTab('https://www.google.com');
+    TabManager.createTab();
 });
