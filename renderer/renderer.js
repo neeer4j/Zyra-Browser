@@ -1,5 +1,5 @@
 /**
- * Zyra Browser - Renderer Script
+ * Zy Browser - Renderer Script
  * 
  * This script handles all UI interactions in the browser window.
  * It manages navigation controls, URL input, and webview interactions.
@@ -261,7 +261,7 @@ function initializeEventHandlers() {
 
     // Page title changed - update window title
     elements.webview.addEventListener('page-title-updated', (event) => {
-        document.title = event.title ? `${event.title} - Zyra` : 'Zyra Browser';
+        document.title = event.title ? `${event.title} - Zy` : 'Zy Browser';
     });
 
     // Handle new window requests (open in same webview)
@@ -322,7 +322,7 @@ function initializeEventHandlers() {
  * Called when the DOM is ready
  */
 function initialize() {
-    console.log('Zyra Browser initializing...');
+    console.log('Zy Browser initializing...');
 
     // Set up event handlers
     initializeEventHandlers();
@@ -336,7 +336,7 @@ function initialize() {
         updateUrlBar(elements.webview.getURL());
     });
 
-    console.log('Zyra Browser initialized');
+    console.log('Zy Browser initialized');
 }
 
 // Start when DOM is loaded

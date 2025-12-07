@@ -1,8 +1,8 @@
-# Zyra Browser
+# Zy Browser
 
 A lightweight, minimalist web browser built with Electron.
 
-![Zyra Browser](https://img.shields.io/badge/Electron-28.0-blue) ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-green)
+![Zy Browser](https://img.shields.io/badge/Electron-28.0-blue) ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-green)
 
 ## Features
 
@@ -11,13 +11,15 @@ A lightweight, minimalist web browser built with Electron.
 - 🔧 **Developer Tools** - Built-in console for testing web apps
 - ⌨️ **Keyboard Shortcuts** - Navigate efficiently
 - 🌐 **Cross-Platform** - Works on Windows, macOS, and Linux
+- 🔒 **Secure** - Standard security features enabled
+- 🔌 **Developer API** - Full access to web APIs (Camera, Mic, etc.) for testing
 
 ## Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/neeer4j/Zyra-Browser.git
-cd Zyra-Browser
+git clone https://github.com/neeer4j/Zy-Browser.git
+cd Zy-Browser
 
 # Install dependencies
 npm install
@@ -47,7 +49,7 @@ npm run build:linux  # Linux (AppImage)
 ## Project Structure
 
 ```
-ZyraBrowser/
+ZyBrowser/
 ├── package.json       # Project config & dependencies
 ├── main.js            # Main Electron process
 ├── preload.js         # Secure IPC bridge

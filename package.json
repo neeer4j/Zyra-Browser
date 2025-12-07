@@ -1,5 +1,5 @@
 {
-    "name": "zyra-browser",
+    "name": "zy-browser",
     "version": "1.0.0",
     "description": "A lightweight, minimalist web browser built with Electron",
     "main": "main.js",
@@ -15,18 +15,19 @@
         "minimal",
         "lightweight"
     ],
-    "author": "Zyra",
+    "author": "Zy",
     "license": "MIT",
     "devDependencies": {
         "electron": "^28.0.0",
         "electron-builder": "^24.9.1"
     },
     "build": {
-        "appId": "com.zyra.browser",
-        "productName": "Zyra",
+        "appId": "com.zy.browser",
+        "productName": "Zy",
         "directories": {
             "output": "dist"
         },
+        "icon": "assets/zy.png",
         "win": {
             "target": "nsis"
         },

@@ -1,5 +1,5 @@
 /**
- * Zyra Browser - Main Process
+ * Zy Browser - Main Process
  * 
  * This is the main Electron process that creates the browser window
  * and handles IPC communication with the renderer process.
@@ -46,6 +46,9 @@ function createWindow() {
         // Use custom title bar for minimal UI
         frame: true,
         titleBarStyle: 'default',
+
+        // Application Icon
+        icon: path.join(__dirname, 'assets', 'zy.png'),
 
         // Window appearance
         backgroundColor: '#1a1a2e',
@@ -133,26 +136,26 @@ function setupPermissionHandlers() {
 
     // Handle async permission requests (camera, mic, geolocation, etc.)
     ses.setPermissionRequestHandler((webContents, permission, callback) => {
-        console.log(`[Zyra] Permission requested: ${permission}`);
+        console.log(`[Zy] Permission requested: ${permission}`);
         // Grant all permissions for developer testing
         callback(true);
     });
 
     // Handle sync permission checks
     ses.setPermissionCheckHandler((webContents, permission, requestingOrigin) => {
-        console.log(`[Zyra] Permission check: ${permission} from ${requestingOrigin}`);
+        console.log(`[Zy] Permission check: ${permission} from ${requestingOrigin}`);
         // Allow all permission checks
         return true;
     });
 
     // Handle device permission requests (USB, Serial, HID)
     ses.setDevicePermissionHandler((details) => {
-        console.log(`[Zyra] Device permission requested: ${details.deviceType}`);
+        console.log(`[Zy] Device permission requested: ${details.deviceType}`);
         // Grant all device permissions for developer testing
         return true;
     });
 
-    console.log('[Zyra] Developer mode: All permissions enabled');
+    console.log('[Zy] Developer mode: All permissions enabled');
 }
 
 // ============================================

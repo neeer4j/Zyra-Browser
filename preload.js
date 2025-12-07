@@ -1,5 +1,5 @@
 /**
- * Zyra Browser - Preload Script
+ * Zy Browser - Preload Script
  * 
  * This script runs in a privileged context before the renderer loads.
  * It creates a secure bridge between the main process and renderer
@@ -19,9 +19,9 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 /**
  * Expose a minimal, secure API to the renderer process.
- * This is accessed via `window.zyraAPI` in the renderer.
+ * This is accessed via `window.zyAPI` in the renderer.
  */
-contextBridge.exposeInMainWorld('zyraAPI', {
+contextBridge.exposeInMainWorld('zyAPI', {
     /**
      * Get the application version
      * @returns {Promise<string>} The app version
@@ -51,5 +51,5 @@ contextBridge.exposeInMainWorld('zyraAPI', {
  *    myAction: (args) => ipcRenderer.invoke('my-action', args)
  * 
  * 3. Use in renderer.js:
- *    const result = await window.zyraAPI.myAction(args);
+ *    const result = await window.zyAPI.myAction(args);
  */
