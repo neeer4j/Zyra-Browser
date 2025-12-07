@@ -1,0 +1,302 @@
+/**
+ * Zyra Browser - Styles
+ * 
+ * Minimal, clean styling for the browser interface.
+ * Uses CSS custom properties (variables) for easy theming.
+ * 
+ * Design Philosophy:
+ * - Dark theme for reduced eye strain
+ * - Minimal shadows and effects for performance
+ * - Clear visual hierarchy
+ * - Responsive and accessible
+ */
+
+/* ============================================
+   CSS VARIABLES (THEME)
+   Customize these to change the browser's look
+   ============================================ */
+:root {
+    /* Primary colors */
+    --bg-primary: #1a1a2e;      /* Main background */
+    --bg-secondary: #16213e;    /* Navbar background */
+    --bg-tertiary: #0f0f1a;     /* Input background */
+    
+    /* Accent colors */
+    --accent-primary: #7c3aed;  /* Primary accent (purple) */
+    --accent-hover: #8b5cf6;    /* Hover state */
+    --accent-active: #6d28d9;   /* Active/pressed state */
+    
+    /* Text colors */
+    --text-primary: #e2e8f0;    /* Primary text */
+    --text-secondary: #94a3b8;  /* Secondary/placeholder text */
+    --text-muted: #64748b;      /* Muted text */
+    
+    /* Border colors */
+    --border-subtle: #2d2d44;   /* Subtle borders */
+    --border-focus: #7c3aed;    /* Focus state border */
+    
+    /* Loading bar */
+    --loading-color: #7c3aed;
+    
+    /* Spacing */
+    --navbar-height: 48px;
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    
+    /* Border radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-normal: 250ms ease;
+}
+
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    font-size: 14px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    
+    /* Prevent text selection in UI elements */
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* ============================================
+   NAVIGATION BAR
+   Fixed at top, contains all browser controls
+   ============================================ */
+.navbar {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    height: var(--navbar-height);
+    padding: 0 var(--spacing-md);
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-subtle);
+    
+    /* Allow dragging the window from navbar */
+    -webkit-app-region: drag;
+}
+
+/* ============================================
+   NAVIGATION BUTTONS
+   Back, Forward, Reload, Dev Tools
+   ============================================ */
+.nav-buttons,
+.util-buttons {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    
+    /* Exclude buttons from window drag */
+    -webkit-app-region: no-drag;
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    
+    /* Exclude from window drag */
+    -webkit-app-region: no-drag;
+}
+
+.nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.nav-btn:active {
+    background-color: rgba(255, 255, 255, 0.05);
+    transform: scale(0.95);
+}
+
+.nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.nav-btn:disabled:hover {
+    background: transparent;
+    color: var(--text-secondary);
+}
+
+/* Active state for dev tools button when open */
+.nav-btn.active {
+    background-color: var(--accent-primary);
+    color: white;
+}
+
+.nav-btn.active:hover {
+    background-color: var(--accent-hover);
+}
+
+/* ============================================
+   URL BAR
+   Centered, expandable input field
+   ============================================ */
+.url-container {
+    flex: 1;
+    min-width: 200px;
+    max-width: 800px;
+    
+    /* Exclude from window drag */
+    -webkit-app-region: no-drag;
+}
+
+.url-input {
+    width: 100%;
+    height: 32px;
+    padding: 0 var(--spacing-md);
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    transition: all var(--transition-fast);
+}
+
+.url-input::placeholder {
+    color: var(--text-muted);
+}
+
+.url-input:hover {
+    border-color: var(--text-muted);
+}
+
+.url-input:focus {
+    border-color: var(--border-focus);
+    background-color: var(--bg-primary);
+    
+    /* Allow text selection when focused */
+    user-select: text;
+    -webkit-user-select: text;
+}
+
+/* ============================================
+   BROWSER CONTENT AREA
+   Contains the webview that displays pages
+   ============================================ */
+.browser-content {
+    height: calc(100vh - var(--navbar-height));
+    background-color: var(--bg-primary);
+}
+
+#webview {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: white;
+}
+
+/* ============================================
+   LOADING BAR
+   Animated bar that shows page load progress
+   ============================================ */
+.loading-bar {
+    position: fixed;
+    top: var(--navbar-height);
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--loading-color), var(--accent-hover));
+    transition: width 300ms ease;
+    z-index: 1000;
+    opacity: 0;
+}
+
+.loading-bar.loading {
+    opacity: 1;
+    animation: loading 1.5s ease-in-out infinite;
+}
+
+.loading-bar.complete {
+    width: 100%;
+    opacity: 0;
+    transition: width 200ms ease, opacity 400ms ease 200ms;
+}
+
+@keyframes loading {
+    0% {
+        width: 0%;
+    }
+    50% {
+        width: 70%;
+    }
+    100% {
+        width: 90%;
+    }
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   Custom scrollbar for consistent appearance
+   ============================================ */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-subtle);
+    border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* ============================================
+   ACCESSIBILITY
+   Focus visible styles for keyboard navigation
+   ============================================ */
+.nav-btn:focus-visible,
+.url-input:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   Adapt layout for smaller windows
+   ============================================ */
+@media (max-width: 600px) {
+    .url-container {
+        min-width: 150px;
+    }
+    
+    .url-input {
+        font-size: 12px;
+    }
+}

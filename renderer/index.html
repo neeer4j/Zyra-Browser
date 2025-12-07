@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!--
+    Zyra Browser - Main UI
+    
+    This is the renderer HTML that displays the browser interface.
+    It includes:
+    - Navigation bar with controls (back, forward, reload)
+    - URL input field
+    - Dev tools toggle button
+    - Webview for displaying web content
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <!-- Security: Prevent clickjacking and XSS -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self';
+        style-src 'self' 'unsafe-inline';
+    ">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zyra Browser</title>
+    
+    <!-- Link to external stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- ============================================
+         NAVIGATION BAR
+         Contains all browser controls in a minimal layout
+         ============================================ -->
+    <nav class="navbar" id="navbar">
+        <!-- Navigation Buttons Group -->
+        <div class="nav-buttons">
+            <!-- Back Button: Navigate to previous page -->
+            <button class="nav-btn" id="btn-back" title="Go Back (Alt+←)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            
+            <!-- Forward Button: Navigate to next page -->
+            <button class="nav-btn" id="btn-forward" title="Go Forward (Alt+→)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </button>
+            
+            <!-- Reload Button: Refresh current page -->
+            <button class="nav-btn" id="btn-reload" title="Reload (Ctrl+R)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 4v6h-6M1 20v-6h6"/>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- URL Bar: Address input field -->
+        <div class="url-container">
+            <input 
+                type="text" 
+                id="url-input" 
+                class="url-input" 
+                placeholder="Enter URL or search..."
+                spellcheck="false"
+                autocomplete="off"
+            >
+        </div>
+        
+        <!-- Utility Buttons -->
+        <div class="util-buttons">
+            <!-- Dev Tools Toggle: Open/close developer console -->
+            <button class="nav-btn" id="btn-devtools" title="Developer Tools (F12)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16 18 22 12 16 6"/>
+                    <polyline points="8 6 2 12 8 18"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- ============================================
+         BROWSER CONTENT
+         Webview displays the actual web pages
+         ============================================ -->
+    <div class="browser-content" id="browser-content">
+        <!-- 
+            Webview: Electron's tag for embedding web content
+            - Runs in a separate process for security
+            - Supports full browser functionality
+            - Has its own navigation history
+        -->
+        <webview 
+            id="webview"
+            src="https://www.google.com"
+            allowpopups
+        ></webview>
+    </div>
+    
+    <!-- ============================================
+         LOADING INDICATOR
+         Shows when a page is loading
+         ============================================ -->
+    <div class="loading-bar" id="loading-bar"></div>
+    
+    <!-- Load the renderer JavaScript -->
+    <script src="renderer.js"></script>
+</body>
+</html>
