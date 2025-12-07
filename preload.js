@@ -29,6 +29,16 @@ contextBridge.exposeInMainWorld('zyAPI', {
     getAppVersion: () => ipcRenderer.invoke('get-app-version'),
 
     /**
+     * Get system performance metrics
+     */
+    getMetrics: () => ipcRenderer.invoke('get-system-metrics'),
+
+    /**
+     * Save a screenshot buffer to disk
+     */
+    saveScreenshot: (buffer) => ipcRenderer.invoke('save-screenshot', { buffer }),
+
+    /**
      * Platform information for UI customization
      */
     platform: process.platform

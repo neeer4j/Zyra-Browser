@@ -87,6 +87,66 @@
          ============================================ -->
     <div class="loading-bar" id="loading-bar"></div>
 
+    <!-- ============================================
+         DEVELOPER PANEL (Hidden by default)
+         contains emulation tools, console, and metrics
+         ============================================ -->
+    <div class="dev-panel" id="dev-panel" style="display: none;">
+        <!-- Header / Toolbar -->
+        <div class="dev-toolbar">
+            <div class="dev-group">
+                <span class="dev-label">Device:</span>
+                <select id="dev-device-select" class="dev-select">
+                    <option value="responsive">Responsive (Default)</option>
+                    <option value="iphone-se">iPhone SE (375x667)</option>
+                    <option value="pixel-7">Pixel 7 (412x915)</option>
+                    <option value="ipad-air">iPad Air (820x1180)</option>
+                    <option value="desktop-hd">Desktop HD (1920x1080)</option>
+                </select>
+            </div>
+
+            <div class="dev-group">
+                <span class="dev-label">UA:</span>
+                <select id="dev-ua-select" class="dev-select">
+                    <option value="default">Default</option>
+                    <option value="mobile-ios">Mobile Safari (iOS)</option>
+                    <option value="mobile-android">Mobile Chrome (Android)</option>
+                    <option value="desktop-chrome">Desktop Chrome (Win)</option>
+                </select>
+            </div>
+
+            <div class="dev-divider"></div>
+
+            <div class="dev-group">
+                <button id="dev-btn-screenshot" class="dev-btn-icon" title="Capture Screenshot">
+                    📸 Snapshot
+                </button>
+                <button id="dev-btn-console" class="dev-btn-icon active" title="Toggle Console">
+                    💻 Console
+                </button>
+            </div>
+
+            <div class="dev-spacer"></div>
+
+            <!-- Performance Metrics -->
+            <div class="dev-metrics">
+                <span id="metric-ram">RAM: -- MB</span>
+                <span id="metric-mem">Sys: -- GB</span>
+            </div>
+        </div>
+
+        <!-- Console Drawer -->
+        <div class="dev-console" id="dev-console">
+            <div class="console-output" id="console-output">
+                <div class="log-entry system">Zy Developer Console ready...</div>
+            </div>
+            <div class="console-input-wrapper">
+                <span class="console-prompt">></span>
+                <input type="text" id="console-input" class="console-input" placeholder="Execute JavaScript...">
+            </div>
+        </div>
+    </div>
+
     <!-- Load the renderer JavaScript -->
     <script src="renderer.js"></script>
 </body>

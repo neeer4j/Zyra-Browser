@@ -10,8 +10,10 @@
  * - Manage developer tools toggle
  */
 
-const { app, BrowserWindow, ipcMain, session } = require('electron');
+const { app, BrowserWindow, ipcMain, session, desktopCapturer } = require('electron');
 const path = require('path');
+const fs = require('fs');
+const os = require('os');
 
 // ============================================
 // CONFIGURATION
@@ -108,6 +110,38 @@ function setupIpcHandlers() {
 
     ipcMain.handle('get-app-version', () => {
         return app.getVersion();
+    });
+
+    // --- Developer Tools IPC ---
+
+    // Get system metrics (RAM, CPU)
+    ipcMain.handle('get-system-metrics', async () => {
+        const totalMem = os.totalmem();
+        const freeMem = os.freemem();
+        const usedMem = totalMem - freeMem;
+        const processMem = process.memoryUsage();
+
+        return {
+            totalMem: (totalMem / 1024 / 1024 / 1024).toFixed(2), // GB
+            usedMem: (usedMem / 1024 / 1024 / 1024).toFixed(2),   // GB
+            processRSS: (processMem.rss / 1024 / 1024).toFixed(2) // MB
+        };
+    });
+
+    // Save screenshot to Downloads
+    ipcMain.handle('save-screenshot', async (event, { buffer }) => {
+        try {
+            const downloadsPath = app.getPath('downloads');
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            const fileName = `Zy-Screenshot-${timestamp}.png`;
+            const filePath = path.join(downloadsPath, fileName);
+
+            fs.writeFileSync(filePath, Buffer.from(buffer));
+            return { success: true, path: filePath };
+        } catch (error) {
+            console.error('Screenshot save failed:', error);
+            return { success: false, error: error.message };
+        }
     });
 }
 

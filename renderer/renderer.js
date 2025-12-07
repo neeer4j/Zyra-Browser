@@ -41,7 +41,9 @@ const elements = {
 
 const state = {
     isDevToolsOpen: false,
-    isLoading: false
+    isLoading: false,
+    isDevPanelOpen: false,
+    metricsInterval: null
 };
 
 // ============================================
