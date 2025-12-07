@@ -10,7 +10,7 @@
  * - Manage developer tools toggle
  */
 
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, session } = require('electron');
 const path = require('path');
 
 // ============================================
@@ -109,11 +109,59 @@ function setupIpcHandlers() {
 }
 
 // ============================================
+// PERMISSION HANDLERS (Developer Mode)
+// ============================================
+
+/**
+ * Set up permission handlers to grant all permissions for developer testing.
+ * This allows testing of all modern web APIs including:
+ * - Camera/Microphone (media)
+ * - Geolocation
+ * - Notifications
+ * - Clipboard
+ * - Screen capture
+ * - USB/Serial/HID devices
+ * - MIDI
+ * - Sensors
+ * - And more...
+ * 
+ * WARNING: This is intended for development/testing only.
+ * For production, implement selective permission granting.
+ */
+function setupPermissionHandlers() {
+    const ses = session.defaultSession;
+
+    // Handle async permission requests (camera, mic, geolocation, etc.)
+    ses.setPermissionRequestHandler((webContents, permission, callback) => {
+        console.log(`[Zyra] Permission requested: ${permission}`);
+        // Grant all permissions for developer testing
+        callback(true);
+    });
+
+    // Handle sync permission checks
+    ses.setPermissionCheckHandler((webContents, permission, requestingOrigin) => {
+        console.log(`[Zyra] Permission check: ${permission} from ${requestingOrigin}`);
+        // Allow all permission checks
+        return true;
+    });
+
+    // Handle device permission requests (USB, Serial, HID)
+    ses.setDevicePermissionHandler((details) => {
+        console.log(`[Zyra] Device permission requested: ${details.deviceType}`);
+        // Grant all device permissions for developer testing
+        return true;
+    });
+
+    console.log('[Zyra] Developer mode: All permissions enabled');
+}
+
+// ============================================
 // APP LIFECYCLE
 // ============================================
 
 // Create window when Electron is ready
 app.whenReady().then(() => {
+    setupPermissionHandlers();
     createWindow();
     setupIpcHandlers();
 
@@ -145,3 +193,19 @@ app.commandLine.appendSwitch('renderer-process-limit', '4');
 
 // Enable memory optimization flags
 app.commandLine.appendSwitch('enable-features', 'CalculateNativeWinOcclusion');
+
+// ============================================
+// EXPERIMENTAL WEB FEATURES (Developer Mode)
+// ============================================
+
+// Enable experimental web platform features for cutting-edge API testing
+app.commandLine.appendSwitch('enable-experimental-web-platform-features');
+
+// Enable WebGPU for graphics-intensive applications
+app.commandLine.appendSwitch('enable-unsafe-webgpu');
+
+// Enable WebXR for AR/VR applications
+app.commandLine.appendSwitch('enable-features', 'WebXR');
+
+// Allow insecure localhost for local development (useful for self-signed certs)
+app.commandLine.appendSwitch('allow-insecure-localhost');
